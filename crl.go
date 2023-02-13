@@ -19,3 +19,18 @@ func readCRL(name string) (*x509.RevocationList, error) {
 
 	return crl, nil
 }
+
+func readCERT(name string) (*x509.Certificate, error) {
+	cert_file, err := os.ReadFile(name)
+	if err != nil {
+		return nil, fmt.Errorf("%v", err.Error())
+	}
+
+	cert, err := x509.ParseCertificate(cert_file)
+	if err != nil {
+		return nil, fmt.Errorf("%v", err.Error())
+	}
+
+	return cert, nil
+}
+
