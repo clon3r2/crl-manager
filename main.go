@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main() {
+func sest() {
 	crl, err := readCRL("crl_out.crl")
 	if err != nil {
 		panic("error reading crl: " + err.Error())

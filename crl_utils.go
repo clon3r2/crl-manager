@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/rand"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"fmt"
@@ -23,9 +22,9 @@ func readCRL(name string) (*x509.RevocationList, error) {
 }
 
 func checkCertIsRevoked(certificate *x509.Certificate, crl *x509.RevocationList) bool {
-	var a []pkix.RevokedCertificate = crl.RevokedCertificates
-	for _, cert := range a {
-		if certificate.SerialNumber == cert.SerialNumber {
+	var revokedCerts []pkix.RevokedCertificate = crl.RevokedCertificates
+	for _, revokedCert := range revokedCerts {
+		if certificate.SerialNumber == revokedCert.SerialNumber {
 			fmt.Println("cert found in crl, SN == ", certificate.SerialNumber)
 			return true
 		}
@@ -34,16 +33,16 @@ func checkCertIsRevoked(certificate *x509.Certificate, crl *x509.RevocationList)
 	return false
 }
 
-func revokeCertificate(certificate *x509.Certificate, oldCrl *x509.RevocationList) (*x509.RevocationList, error) {
-	revokedCerts := []pkix.RevokedCertificate{
-		{SerialNumber: certificate.SerialNumber,
-		RevocationTime: certificate.NotAfter}}
-	
-	priv, err := getPrivateKeys()
-	if err!=nil{
-		fmt.Print("error get priv key: ", err)
-		panic(err.Error())
-	}
-	crl, err := x509.CreateRevocationList(rand.Reader, revokedCerts, oldCrl.Issuer, priv)
-	return nil, nil
-}
+// func revokeCertificate(certificate *x509.Certificate, oldCrl *x509.RevocationList) (*x509.RevocationList, error) {
+// 	revokedCerts := []pkix.RevokedCertificate{
+// 		{SerialNumber: certificate.SerialNumber,
+// 			RevocationTime: certificate.NotAfter}}
+
+// 	priv, err := getPrivateKeys()
+// 	if err != nil {
+// 		fmt.Print("error get priv key: ", err)
+// 		panic(err.Error())
+// 	}
+// 	crl, err := x509.CreateRevocationList(rand.Reader, revokedCerts, oldCrl.Issuer, priv)
+// 	return nil, nil
+// }
